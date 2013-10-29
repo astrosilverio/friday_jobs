@@ -1,6 +1,8 @@
 from random import choice
 from random import randint
-import pdb
+
+# It will be useful to have stacks and queues later
+# defining them first
 
 class Stack(object):
 	def __init__(self):
@@ -62,6 +64,28 @@ class Queue(object):
 		
 	def size(self):
 		return self.items.size()
+		
+# Naive fibonacci
+# (note: we can do fibonacci numbers in O(log n) using transformations a la SICP 1.19)
+
+def fib(n):
+	'''recursive fibonacci'''
+	if n == 0 or n == 1:
+		return 1
+	else:
+		return fib(n-1) + fib(n-2)
+		
+def fib_iter(n):
+	'''tail-recursive fibonacci'''
+	def iter(n, acc, acc_prev):
+		if n == 0:
+			return acc
+		else:
+			return iter(n-1, acc+acc_prev, acc)
+			
+	return iter(n, 1, 0)
+		
+# sum of list
 
 def sum(list):
 	num_elements = len(list)
@@ -76,7 +100,8 @@ def sum(list):
 			return acc
 			
 	return sum_iter(0, num_elements)		
-	
+
+# find last appearance of n in list, first by counting backwards then by counting forwards
 	
 def lastIndexOf_old(n, list):
 
@@ -111,20 +136,8 @@ def lastIndexOf(n, list):
 		return -1
 	else:		
 		return lastIndex_iter(-1,0)
-	
-def sumTree(tree):
-
-	def sum_elem(elem):
-		if not elem.left:
-			elem.left = 0
-		if not elem.right:
-			elem.right = 0
-		if elem.left == 0 and elem.right == 0:
-			return elem.value
-		else:
-			return elem.value + sum(elem.left) + sum(elem.right)
-						
-	return sum_elem(tree.root)
+		
+# First make binary tree class, with depth-first and breadth-first searches
 	
 class Node(object):
 	def __init__(self, value, l=None, r=None):
@@ -162,22 +175,35 @@ class Tree(object):
 				if node.right is not None:
 					q.push(node.right)
 
-		
-
 
 tree = Tree(Node(1, l=Node(2, l=Node(3), r=Node(4)), r=Node(5, l=Node(6), r=Node(7))))
 othertree = Tree(Node(1, l=Node(2, l=Node(3, l=Node(4), r=Node(5)), r=Node(6)), r=Node(8, l=Node(9, l=Node(10), r=Node(11)), r=Node(12))))
 
+# Then find sum of elements, recursively and tail-recursively
+
+def sumTree(tree):
+
+	def sum_elem(elem):
+		if not elem.left:
+			elem.left = 0
+		if not elem.right:
+			elem.right = 0
+		if elem.left == 0 and elem.right == 0:
+			return elem.value
+		else:
+			return elem.value + sum(elem.left) + sum(elem.right)
+						
+	return sum_elem(tree.root)
+	
+
 def sumTreeIter(tree):
 
 	def sum_iter(acc, root, stack):
-#		print acc
 		acc += root.value
 		if root.right is not None:
 			stack.push(root.right)
 		root = root.left
 		if root is None:
-#			print stack.stack
 			if stack.isEmpty():
 				return acc
 			else:
@@ -188,6 +214,8 @@ def sumTreeIter(tree):
 
 
 	return sum_iter(0, tree.root, Stack())
+	
+# find permutations of the power set of a set (of letters)
 	
 def scrabble_all_words(letters):
 
@@ -202,13 +230,9 @@ def scrabble_all_words(letters):
 			
 	make_words(words, letters)
 	return words
+	
+# Step Climbing: find combinations, recursively and tail-recursively
 
-def fib(n):
-	if n == 0 or n == 1:
-		return n
-	else:
-		return fib(n-1) + fib(n-2)
-		
 def count_ways_up_steps(n):
 
 	def counter(nsteps, jump):
@@ -221,6 +245,21 @@ def count_ways_up_steps(n):
 			
 	return counter(n, 3)
 	
+def count_steps_two(n):
+	
+	def count_iter(nsteps, jump, total):
+		if nsteps == 0:
+			total += 1
+			return total
+		elif nsteps < 0 or jump == 0:
+			return total
+		else:
+			return count_iter(nsteps-jump, jump, count_iter(nsteps, jump-1, total))
+			
+	return count_iter(n,3,0)
+	
+# Project Euler 15: find combinations
+	
 def count_ways_through_city(ns_blocks, ew_blocks):
 
 	def counter(ns, ew):
@@ -231,8 +270,39 @@ def count_ways_through_city(ns_blocks, ew_blocks):
 		else:
 			return counter(ns-1, ew) + counter(ns, ew-1)
 			
-	return counter(ns_blocks-1, ew_blocks-1) 
+	return counter(ns_blocks-1, ew_blocks-1)
 	
+# Change-counting: done elsewhere
+
+# Minimax of Tic Tac Toe: in tictactoe.py
+
+# Graphs and Trees
+
+# Difference between graphs and trees
+
+# Difference between directed and undirected graphs
+
+# Make a graph class
+
+# Check accessibility
+
+# subtree test
+
+# recursive implementation of map
+
+# recursive implementation of filter
+
+# make new linked list with element e at location i
+
+# in general, n choose k
+
+# compute n choose k
+
+# find power set of set
+
+# find all partitions of a set
+	
+
 	
 
 	
